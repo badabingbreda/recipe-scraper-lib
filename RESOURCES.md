@@ -19,3 +19,8 @@ https://github.com/schollz/extract_recipe
 
 # Unrelated Inspiration
 https://github.com/scotteh/php-goose
+
+# libraries for editing
+https://yabwe.github.io/medium-editor/
+https://github.com/adityanichkawade/domEdit // https://www.jqueryscript.net/text/in-place-dom-editing.html
+https://codepen.io/Shokeen/pen/XXggZr

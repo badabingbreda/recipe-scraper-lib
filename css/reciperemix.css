@@ -1,0 +1,33 @@
+.reciperemix .remix-handle-sort {
+  display: inline-block;
+}
+.reciperemix .remix-handle-edit {
+  display: none;
+}
+.reciperemix.remix-editing .remix-handle-sort {
+  display: none;
+}
+.reciperemix.remix-editing .remix-handle-edit {
+  display: inline-block;
+}
+.reciperemix ul[remix-editable] {
+  list-style-type: none;
+}
+.reciperemix ul[remix-editable] li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 4px 0px;
+}
+
+/**
+ * Make sure to hide edit icon on drag (element is copied outside of container)
+ */
+.remix-drag {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.remix-drag .remix-handle-edit {
+  display: none;
+}
