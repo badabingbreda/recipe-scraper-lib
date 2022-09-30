@@ -56,6 +56,11 @@ recipeRemix.prototype = {
 
     },
 
+    _strip: function(html) {
+        let doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || "";        
+    },
+
     initListEditable: function() {
 
         // store this so we can use it in jQuery.each()
@@ -147,11 +152,11 @@ recipeRemix.prototype = {
                 case "UL":
                     // get all li [editable-area]
                     let options = [];
-                    $elem.find( 'li [editable-area]' ).each( function( item ) { options.push( { [ $elem.attr( 'remix-sub-name' ) ] : jQuery( this ).text() } ) } );
+                    $elem.find( 'li [editable-area]' ).each( function( item ) { options.push( { [ $elem.attr( 'remix-sub-name' ) ] : $this._strip( jQuery( this ).html() ) } ) } );
                     collected = { ...collected, ...{ [ $elem.attr( 'remix-name' ) ] : options } };
                     break;
                 default:
-                    collected = { ...collected, ...{ [ $elem.attr( 'remix-name' ) ] : $elem.find('[editable-area]').text() } };
+                    collected = { ...collected, ...{ [ $elem.attr( 'remix-name' ) ] : $this._strip( $elem.find('[editable-area]').text() ) } };
             }
         });
 
@@ -185,7 +190,7 @@ recipeRemix.prototype = {
             RR._debounce();
         } );
 
-        $( '.collect' ).on( 'click' , function() {
+        $( '.update' ).on( 'click' , function() {
             let collection = RR._collect();
 
             jQuery.ajax( {
@@ -199,7 +204,6 @@ recipeRemix.prototype = {
                     
                     data = JSON.parse( data );
                     console.log( data );
-                    alert( data.status.message );
                     
                 }
             });
