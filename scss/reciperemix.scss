@@ -19,7 +19,10 @@
         .remix-handle-edit {
             display: inline-block;
         }
-    
+
+        [remix-editable]:not(ul) .remix-handle-edit {
+            position: absolute;
+        }
     }
 
     ul[remix-editable] {
@@ -30,6 +33,17 @@
             margin: 4px 0px;
         }
 
+    }
+
+    [editable-area] {
+        display: inline-block;
+        transition: all .2s;
+        padding: 5px;
+        border-radius: 10px;
+    }
+    [contenteditable]:focus {
+        padding: 10px;
+        outline:2px solid pink;
     }
 
 }
@@ -43,5 +57,14 @@
     .remix-handle-edit {
         display: none;
     }
+}
 
+.edit-remix {
+    &.active {
+        background-color: red;
+    }
+}
+
+.update[disabled] {
+    background-color: lightgrey;
 }

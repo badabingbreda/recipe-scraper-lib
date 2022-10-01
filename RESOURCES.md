@@ -24,3 +24,6 @@ https://github.com/scotteh/php-goose
 https://yabwe.github.io/medium-editor/
 https://github.com/adityanichkawade/domEdit // https://www.jqueryscript.net/text/in-place-dom-editing.html
 https://codepen.io/Shokeen/pen/XXggZr
+
+# About PT duration
+https://en.wikipedia.org/wiki/ISO_8601 (see section with 'Durations')

@@ -1,5 +1,6 @@
 recipeRemix = function ( settings ) {
     this.settings = settings ?? {};
+    this.uniqueid = this.settings?.uniqueid ?? Date.now();
     this.debounceTimeout = 250;
     this.updateContainer = this.settings?.updateContainer ?? '.recipe-target';
     this.editClass = this.settings?.editClass ?? 'remix-editable';
@@ -94,7 +95,7 @@ recipeRemix.prototype = {
     remixItem( item , addSort ) {
         jQuery( item ).addClass( 'remix-item' );
         // wrap the editable area so we can target
-        jQuery( item ).wrapInner( '<span editable-area/>' );
+        jQuery( item ).wrapInner( '<div editable-area/>' );
         // add icons for control
         if (addSort || false ) jQuery( item ).prepend( this.sortableHandle );
         jQuery( item ).append( this.editHandle );
@@ -124,9 +125,13 @@ recipeRemix.prototype = {
         });        
     },
 
-    remixToggle: function() {
+    remixToggle: function( options ) {
 
         const $this = this;
+
+        this.triggerHook( 'toggle' );
+
+        if ( options.toggleButton || false ) jQuery( options.toggleButton ).each( function() { jQuery(this).toggleClass( 'active' ); } );
 
         if ( !jQuery( this.updateContainer ).hasClass( this.whileEditingClass ) ) {
 
@@ -166,13 +171,61 @@ recipeRemix.prototype = {
     /**
      * Debounce resize to prevent too many
      */
-         _debounce: function( ){	
-            clearTimeout( this.debounceTimer );
-            this.debounceTimer = setTimeout( function() {
-                this.remixToggle();
-            }.bind( this ), this.debounceTimeout );
-    
-        },
+    _debounce: function( arg , options ) {
+
+        arg = arg || null;
+        options = options || {};
+
+        clearTimeout( this.debounceTimer );
+        this.debounceTimer = setTimeout( function() {
+            if ( typeof arg == 'function' ) {
+                callback();
+            } else {
+                switch ( arg ) {
+                    case 'toggle':
+                    default:
+                        this.remixToggle( options );
+                }
+            }
+        }.bind( this ), this.debounceTimeout );
+
+    },
+
+   /**
+     * Trigger a hook.
+     *
+     * @since 1.0
+     * @method triggerHook
+     * @param {String} hook The hook to trigger.
+     * @param {Array} args An array of args to pass to the hook.
+     */
+    triggerHook: function( hook, args ) {
+        jQuery( 'body' ).trigger( `reciperemix${this.uniqueid}.` + hook, args );
+    },
+
+        /**
+         * Add a hook.
+         *
+         * @since 1.0
+         * @method addHook
+         * @param {String} hook The hook to add.
+         * @param {Function} callback A function to call when the hook is triggered.
+         */
+    addHook: function( hook, callback ) {
+        jQuery( 'body' ).on( `reciperemix${this.uniqueid}.` + hook, callback );
+    },    
+
+    /**
+     * Remove a hook.
+     *
+     * @since 1.0
+     * @method addHook
+     * @param {String} hook The hook to remove.
+     * @param {Function} callback better to provide callback name/pointer.
+     */
+    deleteHook: function( hook, callback ) {
+        jQuery( 'body' ).off( `reciperemix${this.uniqueid}.` + hook, callback );
+    },     
 
 };
 
@@ -180,15 +233,19 @@ recipeRemix.prototype = {
 (function( $ ) {
     $(document).ready( function() {
 
-        const RR = new recipeRemix();
+        var RR = new recipeRemix();
+        
 
         $('.recipe-submit').on( 'click' , function() {
-            RR.getRecipe();
+            RR.getRecipe( );
         } );
 
         $( '.edit-remix' ).on( 'click' , function() {
-            RR._debounce();
+            if ( typeof RR == 'undefined' ) RR = new recipeRemix();
+            RR._debounce( 'toggle' , { toggleButton: this } );
         } );
+
+        RR.addHook( 'toggle' , function() { $( '.update' ).prop( 'disabled' , (i,v) => !v ) ; } );
 
         $( '.update' ).on( 'click' , function() {
             let collection = RR._collect();
@@ -197,7 +254,7 @@ recipeRemix.prototype = {
                 type: 'POST',
                 url: `/wp-admin/admin-ajax.php?action=update_recipe`,
                 data: { 
-                    postid: 45,
+                    postid: $( 'remixdata' ).attr( 'postid' ),
                     reciperemix: collection
                 },
                 success: (data) => {
