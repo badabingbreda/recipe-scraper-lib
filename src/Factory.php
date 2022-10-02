@@ -37,6 +37,12 @@ class Factory
         Scrapers\WwwTasteOfHomeCom::class => null,
         Scrapers\WwwTwoPeasAndTheirPodCom::class => null,
 
+        // Dutch scrapers
+        Scrapers\WwwLeukeReceptenNl::class => null,
+        Scrapers\WwwAhNl::class => null,
+        Scrapers\WwwMexicanKitchenNl::class => null,
+
+
         // Fallbacks.
         Scrapers\SchemaOrgJsonLd::class => null,
         Scrapers\SchemaOrgMarkup::class => null,

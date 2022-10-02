@@ -3,6 +3,7 @@ namespace RecipeRemix\Helpers;
 
 use Goutte\Client;
 use RecipeRemix\Status;
+use RecipeRemix\Helpers\Scraper;
 
 class Ajax {
 
@@ -20,16 +21,39 @@ class Ajax {
 
         $client = new \Goutte\Client;
         $crawler = $client->request('GET', $_REQUEST[ 'url' ] );
-
+        $recipe = null;
         $scraper = \RecipeScraper\Factory::make();
 
+        // crawler is supported
         if ( $scraper->supports($crawler) ) {
 
-            // create new status and message
-            $status = new Status( 200 , [ 'message' => 'success' ] );
+            if ( !Scraper::testExists( $_REQUEST[ 'url' ]) ) {
+
+                $recipe = $scraper->scrape($crawler);
+                
+                $postid = Scraper::insertRecipe( $recipe , $_REQUEST[ 'url' ] );
+
+                if ( !is_a( $postid , 'Status' ) ) {
+
+                    // create new status and message
+                    $status = new Status( 200 , [ 'message' => 'success' ] );
+
+                } else {
+
+                    $status = $postid;
+                }
+                
+            } else {
+                
+                // create new status and message
+                $status = new Status( 204 , [ 'message' => 'success but exists' ] );
+
+            }
+            
 
             $return = array(
-                "recipe" => $scraper->scrape($crawler),
+                "recipe" => $recipe,
+                "recipeLink" => \get_the_permalink( $postid ),
                 "status" => $status->getStatus(),
             );
 

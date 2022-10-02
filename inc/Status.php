@@ -11,6 +11,8 @@ class Status {
         $this->statuscode = $statuscode;
         $this->settings = $settings;
 
+        return $this;
+
     }
 
     public function getStatus() {

@@ -108,9 +108,9 @@ recipeRemix.prototype = {
     },
     
     getRecipe: function( ) {
-        alert( 'yes' );
-
         const url = jQuery( 'input[name="recipeurl"]' ).val();
+
+        $this = this;
 
         jQuery.ajax( {
             type: 'POST',
@@ -119,7 +119,9 @@ recipeRemix.prototype = {
             success: (data) => {
                 
                 data = JSON.parse( data );
-                alert( data.status.message );
+                console.log( data );
+
+                $this.triggerHook( 'success' , [ { ...data } ] );
                 
             }
         });        
@@ -234,6 +236,17 @@ recipeRemix.prototype = {
     $(document).ready( function() {
 
         var RR = new recipeRemix();
+
+        RR.addHook( 'success' , function( event, data ) { 
+            if ( data.status.code == 200 ) {
+                $( '#messagearea' ).text( 'Success! Forwarding you to recipe now!' );
+                window.setTimeout( function(){ window.location = data.recipeLink; }.bind( data ) , 1000 );
+                //window.location = data.recipeLink;
+            } else {
+                $( '#messagearea' ).text( data.status.message );
+                //alert( data.status.message ); 
+            }
+        } );
         
 
         $('.recipe-submit').on( 'click' , function() {
