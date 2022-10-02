@@ -3,6 +3,7 @@
 namespace RecipeScraper\Scrapers;
 
 use RecipeScraper\Arr;
+
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -153,19 +154,9 @@ class WwwAhNl extends SchemaOrgJsonLd
      */
     protected function extractYield(Crawler $crawler, array $json)
     {
-        $yield = $crawler
-            ->filter('.recipe-meta-item')
-            ->reduce(function (Crawler $node, $i) {
-                $header = $node->filter('.recipe-meta-item-header');
 
-                return $header->count() === 0 || stripos($header->text(), 'servings') !== false;
-            })
-            ->filter('.recipe-meta-item-body');
+        // @todo Find more recipes to test against!
+        return parent::extractYield($crawler, $json)?: '';
 
-        if (! $yield->count()) {
-            return $this->extractString($crawler, '[itemprop="recipeYield"]', ['content', '_text']);
-        }
-
-        return $yield->first()->text();
     }
 }

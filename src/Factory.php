@@ -37,6 +37,10 @@ class Factory
         Scrapers\WwwTasteOfHomeCom::class => null,
         Scrapers\WwwTwoPeasAndTheirPodCom::class => null,
 
+        // Added
+        Scrapers\WwwAmbitiousKitchenCom::class => null,
+
+
         // Dutch scrapers
         Scrapers\WwwLeukeReceptenNl::class => null,
         Scrapers\WwwAhNl::class => null,
