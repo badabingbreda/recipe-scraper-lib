@@ -73,7 +73,8 @@ recipeRemix.prototype = {
 
         $editable_lists.each( function(index){
 
-            jQuery(this).attr( 'uk-sortable' , 'handle: li; cls-drag: uk-sortable-drag remix-drag;' );
+            //jQuery(this).attr( 'uk-sortable' , 'handle: li; cls-drag: uk-sortable-drag remix-drag;' );
+            var sortable = Sortable.create( this );
             jQuery(this).addClass( `remixsort${index}` );
             // add a button that we can use to insert new items to the list
             jQuery(this).after( `<button class="remix-add-option" data-controls="remixsort${index}">Add</button>` );
@@ -139,13 +140,13 @@ recipeRemix.prototype = {
 
             jQuery( `${this.updateContainer} [${this.editClass}] li [editable-area], ${this.updateContainer} [${this.editClass}]:not(ul,li) [editable-area]` ).each( function( index ) { jQuery(this).prop( 'contentEditable' , true ); } );
             jQuery( this.updateContainer ).addClass( this.whileEditingClass );
-            jQuery( `${this.updateContainer} .uk-sortable` ).each( function(index){ UIkit.sortable( this ).$destroy(); } );
+            //jQuery( `${this.updateContainer} .uk-sortable` ).each( function(index){ UIkit.sortable( this ).$destroy(); } );
         } else {
 
             jQuery( `${this.updateContainer} [${this.editClass}] li [editable-area], ${this.updateContainer} [${this.editClass}]:not(ul,li) [editable-area]` ).each( function( index ) { jQuery(this).prop( 'contentEditable' , false ); } );
             jQuery( this.updateContainer ).removeClass( this.whileEditingClass );
             // 
-            UIkit.sortable( `${this.updateContainer} .uk-sortable` );
+            //UIkit.sortable( `${this.updateContainer} .uk-sortable` );
         }        
     },
 

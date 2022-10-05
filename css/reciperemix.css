@@ -4,9 +4,6 @@
 .reciperemix .remix-handle-edit {
   display: none;
 }
-.reciperemix.remix-editing .remix-handle-sort {
-  display: none;
-}
 .reciperemix.remix-editing .remix-handle-edit {
   display: inline-block;
 }

@@ -1,15 +1,21 @@
 <?php
 namespace RecipeRemix;
 
+use RecipeRemix\Helpers\WordPress;
 use RecipeRemix\Helpers\ScriptStyle;
 use RecipeRemix\Helpers\Ajax;
+
+use RecipeRemix\Integration\ACF;
 
 class Init {
 
     public function __construct() {
 
+        new WordPress();
         new ScriptStyle();
         new Ajax();
+
+        new ACF();
 
         //add_action( 'init' , __CLASS__ . '::guzzle' );
 
