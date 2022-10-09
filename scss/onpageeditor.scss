@@ -1,31 +1,39 @@
-.reciperemix {
+.onpageeditor {
 
     // display sort handle
-    .remix-handle-sort {
+    .ope-handle-sort {
         display: inline-block;
+        &:hover {
+            cursor: move;
+        }
     }
     // hide edit handle
-    .remix-handle-edit {
+    .ope-handle-edit {
         display: none;
     }
 
+    *[class^="ope-handle-"] {
+        margin-right: 10px;
+        text-align: center;
+    }
+
     // when editing
-    &.remix-editing {
+    &.ope-editing {
 
         // .remix-handle-sort {
         //     display: none;
         // }
     
-        .remix-handle-edit {
+        .ope-handle-edit {
             display: inline-block;
         }
 
-        [remix-editable]:not(ul) .remix-handle-edit {
+        [ope-editable]:not(ul) .ope-handle-edit {
             position: absolute;
         }
     }
 
-    ul[remix-editable] {
+    ul[ope-editable] {
         list-style-type: none;
         
         li {
@@ -51,7 +59,7 @@
 /**
  * Make sure to hide edit icon on drag (element is copied outside of container)
  */
-.remix-drag {
+.ope-drag {
 
     display: flex;
     .remix-handle-edit {
@@ -59,12 +67,12 @@
     }
 }
 
-.edit-remix {
+.ope-edittext {
     &.active {
         background-color: red;
     }
 }
 
-.update[disabled] {
+.ope-update[disabled] {
     background-color: lightgrey;
 }
