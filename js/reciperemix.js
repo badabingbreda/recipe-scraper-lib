@@ -1,17 +1,14 @@
 recipeRemix = function( settings ) {
 
     this.hookPrefix = `reciperemix`;
-    
 
 }
 
 recipeRemix.prototype = {
 
-    getRecipe: function( ) {
-        const url = jQuery( 'input[name="recipeurl"]' ).val();
+    getRecipe: function( url ) {
 
         $this = this;
-
         jQuery.ajax( {
             type: 'POST',
             url: `/wp-admin/admin-ajax.php?action=scrape_recipe&url=${url}`,
@@ -62,4 +59,35 @@ recipeRemix.prototype = {
     deleteHook: function( hook, callback ) {
         jQuery( 'body' ).off( `${this.hookPrefix}.` + hook, callback );
     },     
-}
+};
+
+(function($){
+
+    $(document).ready( function() {
+
+        const reciperemix = new recipeRemix();
+
+        const getrecipe = function( e ) {
+
+            const url = $( '#recipeurl' ).val();
+            reciperemix.getRecipe( url );
+
+        };
+
+        $( '.recipe-submit' ).on( 'click' , getrecipe );
+
+        reciperemix.addHook( 'success' , function( event, data ) { 
+            if ( data.status.code == 200 ) {
+                $( '#messagearea' ).text( 'Success! Forwarding you to recipe now!' );
+                window.setTimeout( function(){ window.location = data.recipeLink; }.bind( data ) , 1000 );
+                //window.location = data.recipeLink;
+            } else {
+                $( '#messagearea' ).text( data.status.message );
+                //alert( data.status.message ); 
+            }
+        } );
+
+
+    });
+
+})(jQuery);

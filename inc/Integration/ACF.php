@@ -9,7 +9,7 @@ class ACF {
 
         // change fieldgroup json store paths
         // and load fieldgroups from plugin acf-json dir
-        new LocalJson();
+        //new LocalJson();
 
     }
  

@@ -1,0 +1,82 @@
+@media (max-width: 640px) {
+  .acf-repeater .acf-row > .acf-row-handle .acf-icon.-plus,
+.acf-repeater .acf-row > .acf-row-handle .acf-icon.-minus {
+    display: block;
+  }
+}
+.acfe-form .acf-input input[type=text] {
+  font-size: 1em;
+  line-height: 1.4em;
+  padding: 0.4em;
+  min-height: 2.4em;
+  background-color: unset;
+  border-radius: 0px;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 3px solid #f1f1f1;
+}
+.acfe-form .acf-input input[type=text]:focus {
+  border-bottom: 3px solid slateblue;
+}
+.acfe-form .acf-input textarea {
+  font-size: 1em;
+  background-color: white;
+  border: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.acfe-form .acf-field[data-type=select] {
+  margin-bottom: 20px;
+}
+.acfe-form .acf-field-repeater td.acf-row-handle > span {
+  padding: 5px 10px;
+}
+.acfe-form .acf-field-repeater td.acf-row-handle:hover span {
+  background-color: slateblue;
+  border-radius: 8px;
+  display: block;
+  color: white;
+  text-shadow: none;
+}
+.acfe-form .acf-field-repeater > .acf-input > .acf-repeater table {
+  border: none;
+}
+.acfe-form .acf-field-repeater > .acf-input > .acf-repeater table tbody {
+  border-top: 20px solid #f1f1f1;
+  border-bottom: 20px solid #f1f1f1;
+}
+.acfe-form .acf-field-repeater > .acf-input > .acf-repeater > .acfe-repeater-stylised-button {
+  padding: 10px 20px !important;
+  border: none !important;
+}
+.acfe-form .acf-field-repeater > .acf-input > .acf-repeater > .acfe-repeater-stylised-button > .acf-actions {
+  text-align: center;
+}
+.acfe-form .acf-field-repeater > .acf-input > .acf-repeater > .acfe-repeater-stylised-button a {
+  display: block;
+  border-radius: 6px;
+  background-color: slateblue;
+  padding: 5px 10px;
+  color: white;
+  font-weight: 500;
+  border: 2px solid slateblue;
+  -webkit-transition: all 0.1s;
+  transition: all 0.1s;
+}
+.acfe-form .acf-field-repeater > .acf-input > .acf-repeater > .acfe-repeater-stylised-button a:hover {
+  background-color: #2c216d;
+  text-decoration: none;
+}
+.acfe-form .acf-form-submit input[type=submit] {
+  background-color: slateblue;
+  font-size: 1em;
+  -webkit-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+.acfe-form .acf-form-submit input[type=submit]:hover {
+  background-color: #2c216d;
+}
+.acfe-form .acf-form-submit input[type=submit]:not(.disabled) + [uk-spinner] {
+  display: none;
+}

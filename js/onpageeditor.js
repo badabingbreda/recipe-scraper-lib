@@ -42,28 +42,40 @@ onPageEditor.prototype = {
         
         this._createAddOptions();
 
-        jQuery( 'body' ).on( 'click' , '[ope-option-save]' , function( e ) {
-
-            const $this = this;
-            let $elem = jQuery( e.target );
-            let listElem = $elem.closest( 'ul' );
-            let control = $elem.closest( `[class*="ope-unsaved"]` );
-            // find the controller element
-            // store content of textarea
-            let contents = control.find( 'textarea' ).val();
-            control.replaceWith( `<li>${contents}</li>` );
-            listElem.find( 'li:not( [class*="ope-item"] )' ).each( function( index) { $this.remixItem( this , true ); } );
-            
-        }.bind( this ) );
-        
-        jQuery( 'body' ).on( 'click' , '[ope-option-trash]' , function( e ) {
-            const $this = this;
-            let $elem = jQuery( e.target );
-            let control = $elem.closest( `[class*="ope-unsaved"]` );
-            control.remove();
-        }.bind( this ) );
-        
+   
         $this.triggerHook( 'init-after' [ { ...this } ] );
+
+    },
+
+    itemMoveUp: function( e ) {
+
+        // get target
+        const elem = e.target;
+        // get ul classname
+        let index = jQuery(elem).closest( 'li' ).index();
+        let sortelem = jQuery(elem).closest( 'ul' ).attr( this.sortablePrefix );
+        this.move_item( sortelem, index,'up' );
+
+    },
+    
+    itemMoveDown: function( e ) {
+        
+        // get target
+        const elem = e.target;
+        // get ul classname
+        let index = jQuery(elem).closest( 'li' ).index();
+        let sortelem = jQuery(elem).closest( 'ul' ).attr( this.sortablePrefix );
+        this.move_item( sortelem, index,'down' );
+        
+    },
+    
+    addOption( e ) {
+
+        const elem = e.target;
+        // get the attribute 'data-controls'
+        let index = jQuery( elem ).attr( 'data-controls' );
+        
+        jQuery( `${this.targetSelector} [ope-sort="${index}"]` ).append( `<li class="uk-position-relative ope-unsaved"><textarea></textarea><div style="position:absolute;top:0;left:-24px;" ope-option-save>${this.checkHandle}</div><div style="position:absolute;top:24px;left:-24px;" ope-option-trash>${this.trashHandle}</div></li>` );
 
     },
 
@@ -95,17 +107,49 @@ onPageEditor.prototype = {
         const $this = this;
         
         this.collection.filter( 'ul' ).each( function(index){
-			let sortableIdentifier = `${$this.sortablePrefix}${index}`;
+			let sortableIdentifier = `${$this.sortablePrefix}`;
 			// enable Sortable for this field
-			$this.sortables[ sortableIdentifier ] = Sortable.create( this , { scroll: true , bubbleScroll : true } );
+			$this.sortables[ index ] = Sortable.create( this , { scroll: true , bubbleScroll : true } );
 			// add class so we can target when we need to add/remove things
-			jQuery(this).addClass( sortableIdentifier );
+			jQuery(this).attr( sortableIdentifier , index );
 
 			// add a button that we can use to insert new items to the list
-            jQuery(this).after( $this.addOptionHandle(sortableIdentifier) );
+            jQuery(this).after( $this.addOptionHandle(index) );
 
 			$this.makeEditable( this );
         });
+
+        // no need to add handlers
+        if ( this.collection.filter( 'ul' ).length == 0 ) return;
+
+        // add move/up down on item handlers
+        jQuery( this.targetSelector ).on( 'click' , '.ope-handle-up' , $this.itemMoveUp.bind( this ) );
+        jQuery( this.targetSelector ).on( 'click' , '.ope-handle-down' , $this.itemMoveDown.bind( this ) );
+
+        jQuery( this.targetSelector ).on( 'click' , '.ope-add-option' , $this.addOption.bind( this ) );
+
+        jQuery( 'body' ).on( 'click' , '[ope-option-save]' , function( e ) {
+
+            const $this = this;
+            let $elem = jQuery( e.target );
+            let listElem = $elem.closest( 'ul' );
+            let control = $elem.closest( `[class*="ope-unsaved"]` );
+            // find the controller element
+            // store content of textarea
+            let contents = control.find( 'textarea' ).val();
+            control.replaceWith( `<li>${contents}</li>` );
+
+            $this.makeEditable(listElem[0] );
+            //listElem.find( 'li:not( [class*="ope-item"] )' ).each( function( index) { $this.remixItem( this , true ); } );
+            
+        }.bind( this ) );
+        
+        jQuery( 'body' ).on( 'click' , '[ope-option-trash]' , function( e ) {
+            const $this = this;
+            let $elem = jQuery( e.target );
+            let control = $elem.closest( `[class*="ope-unsaved"]` );
+            control.remove();
+        }.bind( this ) );
 
     },
 
@@ -121,27 +165,17 @@ onPageEditor.prototype = {
     },
 
     reverse: function( index ) {
-        let sortableIdentifier = `${$this.sortablePrefix}${index}`;
-        var order = this.sortables[sortableIdentifier ].toArray();
-
+        var order = this.sortables[index ].toArray();
         var new_order = this.array_move( order, 0, 1 );
-        this.sortables[ sortableIdentifier ].sort(new_order, true);
+        this.sortables[ index ].sort(new_order, true);
     },
 
-    move_item: function( sortableindex , itemindex , direction ) {
-
-        let sortableIdentifier = null;
+    move_item: function( sortableIndex , itemindex , direction ) {
 
         if ( itemindex == 0 && direction == 'up' ) return;
-        if ( typeof sortableindex == 'number' ) {
-            sortableIdentifier = `${$this.sortablePrefix}${sortableindex}`;
-        } else {
-            sortableIdentifier = sortableindex;
-        }
-        var order = this.sortables[sortableIdentifier ].toArray();
+        var order = this.sortables[sortableIndex ].toArray();
         this.array_move( order , itemindex , direction == 'up' ? itemindex - 1 : itemindex + 1  );
-        this.sortables[ sortableIdentifier ].sort(order, true);
-
+        this.sortables[ sortableIndex ].sort(order, true);
     },
 
     /**
@@ -172,9 +206,9 @@ onPageEditor.prototype = {
 		$this.triggerHook( 'makeeditable' );
 
 		if ( item.tagName == 'UL' ) {
-			jQuery( item ).find( 'li' ).each( function( index ) {
+			jQuery( item ).find( 'li:not(.ope-item)' ).each( function( index ) {
 
-				jQuery( this ).addClass( 'remix-item' );
+				jQuery( this ).addClass( 'ope-item' );
 				// wrap the editable area so we can target
 				jQuery( this ).wrapInner( '<div editable-area/>' );
 				// add icons for control
@@ -185,7 +219,7 @@ onPageEditor.prototype = {
 			});
 		} else {
 			
-			jQuery( item ).addClass( 'remix-item' );
+			jQuery( item ).addClass( 'ope-item' );
 			// wrap the editable area so we can target
 			jQuery( item ).wrapInner( '<div editable-area/>' );
 			jQuery( item ).append( $this.editHandle );
@@ -193,11 +227,6 @@ onPageEditor.prototype = {
 		}
     },
 
-    addOption( target ) {
-
-        jQuery( target ).append( `<li class="uk-position-relative remix-unsaved"><textarea></textarea><div style="position:absolute;top:0;left:-24px;" remix-option-save>${this.checkHandle}</div><div style="position:absolute;top:24px;left:-24px;" remix-option-trash>${this.trashHandle}</div></li>` );
-
-    },
     
     toggleEdit: function( options ) {
 
@@ -333,17 +362,6 @@ onPageEditor.prototype = {
 
         onpageeditor = new onPageEditor();
 
-        onpageeditor.addHook( 'success' , function( event, data ) { 
-            if ( data.status.code == 200 ) {
-                $( '#messagearea' ).text( 'Success! Forwarding you to recipe now!' );
-                window.setTimeout( function(){ window.location = data.recipeLink; }.bind( data ) , 1000 );
-                //window.location = data.recipeLink;
-            } else {
-                $( '#messagearea' ).text( data.status.message );
-                //alert( data.status.message ); 
-            }
-        } );
-        
         $( '.ope-edittext' ).on( 'click' , function() {
             onpageeditor._debounce( 'toggle' , { toggleButton: this } );
         } );
@@ -360,15 +378,6 @@ onPageEditor.prototype = {
             
         });
 
-        $( '.ope-reverse' ).on( 'click' , function() {
-            onpageeditor.move_item(1,0,'down');
-        } );  
-        
-        $( '.ope-handle-up' ).on( 'click' , function() {
-             
-            console.log( $(this).closest( 'li' ).index());
-        } );
-
         $( '.ope-update' ).on( 'click' , function() {
             let collection = onpageeditor.collect();
 
@@ -379,7 +388,7 @@ onPageEditor.prototype = {
                 url: `/wp-admin/admin-ajax.php?action=update_recipe`,
                 data: { 
                     postid: $( 'onpageeditor' ).attr( 'postid' ),
-                    reciperemix: collection
+                    collection: collection
                 },
                 success: (data) => {
                     

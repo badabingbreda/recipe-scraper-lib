@@ -36,9 +36,34 @@
     ul[ope-editable] {
         list-style-type: none;
         
-        li {
+        li.ope-item {
             display: flex;
+            position: relative;
             margin: 4px 0px;
+            &:not(:last-child) {
+                border-bottom: 1px solid rgba(0,0,0,.5);
+            }
+            [editable-area] {
+                flex-grow: 1;
+            }
+            .ope-handle-move {
+                margin:0;
+                color: grey;
+                align-self: flex-start;
+                text-align: right;
+                width: 20px;
+                height: 48px;
+                transition: all .2s;
+                border-radius: 6px;
+                cursor: pointer;
+            }
+            &:hover {
+                background-color: #f3f3f3;
+                .ope-handle-move {
+                    background-color: slategray;
+                    color: white;
+                }
+            }
         }
 
     }
@@ -53,6 +78,7 @@
         padding: 10px;
         outline:2px solid pink;
     }
+
 
 }
 
@@ -76,3 +102,4 @@
 .ope-update[disabled] {
     background-color: lightgrey;
 }
+

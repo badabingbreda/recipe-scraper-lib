@@ -1,0 +1,131 @@
+$acfedit-theme-color-1          : slateblue;
+$acfedit-theme-darken-1         : 30%;
+
+@media (max-width: 640px) {
+
+    .acf-repeater .acf-row > .acf-row-handle {
+        .acf-icon.-plus,
+        .acf-icon.-minus {
+            display: block;
+        }
+    }
+}
+
+.acfe-form {
+    
+    .acf-input {
+    
+            input[type="text"] {
+                font-size: 1em;
+                line-height: 1.4em;
+                padding: .4em;
+                min-height: 2.4em;
+                background-color: unset;
+                border-radius: 0px;
+                border-top: 0;
+                border-left: 0;
+                border-right: 0;
+                border-bottom: 3px solid #f1f1f1;
+                
+                &:focus {
+                    border-bottom: 3px solid #{$acfedit-theme-color-1};
+                }
+            }
+    
+            textarea {
+                font-size: 1em;
+                background-color: white;
+                border: none;
+                box-shadow: none;
+            }
+        
+    }
+    
+    .acf-field {
+        &[data-type="select"] {
+            margin-bottom: 20px;
+        }
+    }
+    
+    
+    .acf-field-repeater  {
+        
+        td.acf-row-handle {
+            > span {
+                padding: 5px 10px;
+            }
+            &:hover {
+                & span {
+                    background-color: #{$acfedit-theme-color-1};
+                    border-radius: 8px;
+                    display: block;
+                    color: white;
+                    text-shadow: none;
+                }
+            }
+
+        }
+
+        > .acf-input {
+            
+            > .acf-repeater {
+                
+                table {
+                    border: none;
+                    tbody {
+                        border-top: 20px solid #f1f1f1;
+                        border-bottom: 20px solid #f1f1f1;
+                    }
+                }
+                
+                > .acfe-repeater-stylised-button {
+                    padding: 10px 20px !important;
+                    border: none !important;
+                    
+                    > .acf-actions {
+                        text-align: center;
+                    }
+                    
+                    // Add row button
+                    a {
+                        display: block;
+                        border-radius: 6px;
+                        background-color: #{$acfedit-theme-color-1};
+                        padding: 5px 10px;
+                        color: white;
+                        font-weight: 500;
+                        border: 2px solid #{$acfedit-theme-color-1};
+                        transition: all .1s;
+                        &:hover {
+                            background-color: darken( $acfedit-theme-color-1 , $acfedit-theme-darken-1);
+                            text-decoration: none;
+                        }
+                    }
+               }
+            }
+        } 
+        
+    }
+
+    .acf-form-submit {
+        input[type="submit"] {
+            background-color: #{$acfedit-theme-color-1};
+            font-size: 1em;
+            transition: all .2s ease-out;
+            &:hover {
+                background-color: darken($acfedit-theme-color-1, $acfedit-theme-darken-1);
+            }
+            
+            // spinner button when replaced by uk-spinner
+            &:not(.disabled) + [uk-spinner] {
+                    display: none;
+            }
+
+        }
+        
+        
+    }
+    
+}
+
+

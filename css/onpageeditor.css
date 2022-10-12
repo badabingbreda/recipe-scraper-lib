@@ -1,0 +1,88 @@
+.onpageeditor .ope-handle-sort {
+  display: inline-block;
+}
+.onpageeditor .ope-handle-sort:hover {
+  cursor: move;
+}
+.onpageeditor .ope-handle-edit {
+  display: none;
+}
+.onpageeditor *[class^=ope-handle-] {
+  margin-right: 10px;
+  text-align: center;
+}
+.onpageeditor.ope-editing .ope-handle-edit {
+  display: inline-block;
+}
+.onpageeditor.ope-editing [ope-editable]:not(ul) .ope-handle-edit {
+  position: absolute;
+}
+.onpageeditor ul[ope-editable] {
+  list-style-type: none;
+}
+.onpageeditor ul[ope-editable] li.ope-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  margin: 4px 0px;
+}
+.onpageeditor ul[ope-editable] li.ope-item:not(:last-child) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+.onpageeditor ul[ope-editable] li.ope-item [editable-area] {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+.onpageeditor ul[ope-editable] li.ope-item .ope-handle-move {
+  margin: 0;
+  color: grey;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+  text-align: right;
+  width: 20px;
+  height: 48px;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.onpageeditor ul[ope-editable] li.ope-item:hover {
+  background-color: #f3f3f3;
+}
+.onpageeditor ul[ope-editable] li.ope-item:hover .ope-handle-move {
+  background-color: slategray;
+  color: white;
+}
+.onpageeditor [editable-area] {
+  display: inline-block;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  padding: 5px;
+  border-radius: 10px;
+}
+.onpageeditor [contenteditable]:focus {
+  padding: 10px;
+  outline: 2px solid pink;
+}
+
+/**
+ * Make sure to hide edit icon on drag (element is copied outside of container)
+ */
+.ope-drag {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.ope-drag .remix-handle-edit {
+  display: none;
+}
+
+.ope-edittext.active {
+  background-color: red;
+}
+
+.ope-update[disabled] {
+  background-color: lightgrey;
+}

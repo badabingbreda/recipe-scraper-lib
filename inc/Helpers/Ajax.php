@@ -80,7 +80,7 @@ class Ajax {
 
         $status = new Status( 200 , [ 'message' => 'success' ] );
 
-        $reciperemix = $_REQUEST[ 'reciperemix' ];
+        $reciperemix = $_REQUEST[ 'collection' ];
 
         foreach( $reciperemix as $name => $value) {
             \update_field( $name , $value , $_REQUEST[ 'postid' ] );
@@ -88,7 +88,7 @@ class Ajax {
 
         $return = array(
             "postid" => $_REQUEST[ 'postid' ],
-            "recipe" => $_REQUEST[ 'reciperemix' ],
+            "recipe" => $_REQUEST[ 'collection' ],
             "status" => $status->getStatus(),
         );
 

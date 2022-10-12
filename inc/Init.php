@@ -6,6 +6,9 @@ use RecipeRemix\Helpers\ScriptStyle;
 use RecipeRemix\Helpers\Ajax;
 
 use RecipeRemix\Integration\ACF;
+use RecipeRemix\Integration\ACFExtended;
+use RecipeRemix\Integration\Timber;
+
 
 class Init {
 
@@ -16,6 +19,8 @@ class Init {
         new Ajax();
 
         new ACF();
+        new ACFExtended();
+        new Timber();
 
         //add_action( 'init' , __CLASS__ . '::guzzle' );
 
